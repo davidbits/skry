@@ -11,15 +11,9 @@ use tracing::{debug, info};
 #[derive(Debug, Clone)]
 pub enum Intent {
     /// Direct symbol resolution
-    Symbol {
-        file: PathBuf,
-        symbol: String,
-    },
+    Symbol { file: PathBuf, symbol: String },
     /// Natural language search
-    Search {
-        query: String,
-        depth: usize,
-    },
+    Search { query: String, depth: usize },
 }
 
 /// Entry point for the LSP traversal
@@ -82,12 +76,12 @@ impl Pipeline {
         match intent {
             Intent::Symbol { file, symbol } => {
                 debug!("Resolving entry point for symbol: {}", symbol);
-                
+
                 // In a full implementation, this would:
                 // 1. Open the file
                 // 2. Search for the symbol
                 // 3. Return the position
-                
+
                 Ok(EntryPoint {
                     file: file.clone(),
                     position: Position::new(0, 0),
@@ -95,11 +89,11 @@ impl Pipeline {
             }
             Intent::Search { query, .. } => {
                 debug!("Searching for entry point: {}", query);
-                
+
                 // In a full implementation, this would:
                 // 1. Use grep/fuzzy finding to locate the query
                 // 2. Return the best match
-                
+
                 Ok(EntryPoint {
                     file: PathBuf::from("src/main.rs"),
                     position: Position::new(0, 0),
@@ -109,15 +103,15 @@ impl Pipeline {
     }
 
     /// Traverse the dependency graph starting from an entry point
-    pub async fn traverse_dependencies(
-        &self,
-        _entry: &EntryPoint,
-    ) -> Result<DependencyGraph> {
-        debug!("Starting dependency traversal (max depth: {})", self.max_depth);
-        
+    pub async fn traverse_dependencies(&self, _entry: &EntryPoint) -> Result<DependencyGraph> {
+        debug!(
+            "Starting dependency traversal (max depth: {})",
+            self.max_depth
+        );
+
         // Placeholder for actual LSP-based traversal
         // Would recursively call textDocument/definition and textDocument/references
-        
+
         Ok(DependencyGraph {
             nodes: Vec::new(),
             depth: 0,
@@ -150,13 +144,9 @@ mod tests {
 
     #[test]
     fn test_parse_search_intent() {
-        let intent = Pipeline::parse_intent(
-            None,
-            None,
-            Some("auth_middleware".to_string()),
-            Some(3),
-        )
-        .unwrap();
+        let intent =
+            Pipeline::parse_intent(None, None, Some("auth_middleware".to_string()), Some(3))
+                .unwrap();
 
         match intent {
             Intent::Search { query, depth } => {

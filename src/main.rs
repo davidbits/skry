@@ -5,7 +5,6 @@ use clap::{Parser, Subcommand};
 use skry::{assembly, pipeline, standby, Config};
 use std::path::PathBuf;
 use tracing::info;
-use tracing_subscriber;
 
 /// skry - A deterministic, LSP-powered context assembler for LLMs
 #[derive(Parser)]
@@ -140,11 +139,9 @@ async fn generate(
     info!("Traversed {} dependencies", graph.nodes.len());
 
     // Assemble context
-    let assembler = assembly::Assembler::new(
-        config.general.token_budget,
-        config.general.pruning_strategy,
-    );
-    
+    let assembler =
+        assembly::Assembler::new(config.general.token_budget, config.general.pruning_strategy);
+
     let intent_str = intent.unwrap_or_else(|| "Context retrieval".to_string());
     let output = assembler.assemble(&graph, &intent_str)?;
 

@@ -9,7 +9,7 @@ use std::fs;
 use std::path::Path;
 
 /// Main configuration structure for skry
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
     #[serde(default)]
     pub general: GeneralConfig,
@@ -23,7 +23,7 @@ pub struct GeneralConfig {
     /// Maximum number of tokens to include in the context
     #[serde(default = "default_token_budget")]
     pub token_budget: usize,
-    
+
     /// Pruning strategy for dependencies
     #[serde(default = "default_pruning_strategy")]
     pub pruning_strategy: PruningStrategy,
@@ -71,32 +71,23 @@ impl Default for LspConfig {
     }
 }
 
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            general: GeneralConfig::default(),
-            lsp: LspConfig::default(),
-        }
-    }
-}
-
 impl Config {
     /// Load configuration from a file
     pub fn load<P: AsRef<Path>>(path: P) -> Result<Self> {
         let content = fs::read_to_string(path.as_ref())
             .with_context(|| format!("Failed to read config file: {:?}", path.as_ref()))?;
-        
-        let config: Config = toml::from_str(&content)
-            .with_context(|| "Failed to parse TOML configuration")?;
-        
+
+        let config: Config =
+            toml::from_str(&content).with_context(|| "Failed to parse TOML configuration")?;
+
         Ok(config)
     }
-    
+
     /// Try to load config from default locations, or return default config
     pub fn load_or_default() -> Self {
         Self::try_load_default().unwrap_or_default()
     }
-    
+
     /// Try to load config from default location (.skry.toml in current directory)
     fn try_load_default() -> Option<Self> {
         let config_path = Path::new(".skry.toml");
@@ -106,7 +97,7 @@ impl Config {
             None
         }
     }
-    
+
     /// Get the LSP server command for a given file extension
     pub fn get_lsp_command(&self, extension: &str) -> Option<&str> {
         self.lsp.servers.get(extension).map(|s| s.as_str())

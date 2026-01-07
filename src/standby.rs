@@ -23,7 +23,7 @@ impl StandbyDaemon {
     /// Start the daemon
     pub async fn start(&self) -> Result<()> {
         let mut running = self.running.lock().await;
-        
+
         if *running {
             warn!("Daemon is already running");
             return Ok(());
@@ -36,18 +36,18 @@ impl StandbyDaemon {
         // 1. Start LSP servers for configured languages
         // 2. Listen for incoming query requests
         // 3. Handle requests without restarting servers
-        
+
         info!("Standby daemon started successfully");
         info!("LSP servers are now running in the background");
         info!("Use 'skry query' to send queries to the daemon");
-        
+
         Ok(())
     }
 
     /// Stop the daemon
     pub async fn stop(&self) -> Result<()> {
         let mut running = self.running.lock().await;
-        
+
         if !*running {
             warn!("Daemon is not running");
             return Ok(());
@@ -57,7 +57,7 @@ impl StandbyDaemon {
         *running = false;
 
         // Clean up LSP servers
-        
+
         info!("Standby daemon stopped");
         Ok(())
     }
@@ -74,12 +74,12 @@ impl StandbyDaemon {
         }
 
         info!("Processing query via standby daemon");
-        
+
         // In a full implementation, this would:
         // 1. Parse the query
         // 2. Use the running LSP servers
         // 3. Return results
-        
+
         Ok("Query processed (placeholder)".to_string())
     }
 }
@@ -103,10 +103,10 @@ mod tests {
     #[tokio::test]
     async fn test_daemon_start_stop() {
         let daemon = StandbyDaemon::new();
-        
+
         daemon.start().await.unwrap();
         assert!(daemon.is_running().await);
-        
+
         daemon.stop().await.unwrap();
         assert!(!daemon.is_running().await);
     }

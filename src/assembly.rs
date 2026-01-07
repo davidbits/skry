@@ -38,24 +38,24 @@ impl Assembler {
 
         // Add context information
         output.push_str("# Context\n\n");
-        output.push_str(&format!(
-            "The following code snippets were retrieved by traversing the dependency graph.\n"
-        ));
+        output.push_str(
+            "The following code snippets were retrieved by traversing the dependency graph.\n",
+        );
         output.push_str(&format!("Graph depth: {}\n", graph.depth));
         output.push_str(&format!("Total nodes: {}\n\n", graph.nodes.len()));
 
         // Add code snippets
         output.push_str("# Code Snippets\n\n");
-        
+
         for (i, node) in graph.nodes.iter().enumerate() {
             output.push_str(&format!("## {} - {}\n\n", i + 1, node.symbol));
             output.push_str(&format!("Location: {}\n\n", node.location));
             output.push_str("```\n");
-            
+
             // Apply pruning strategy
             let content = self.prune_content(&node.content);
             output.push_str(&content);
-            
+
             output.push_str("\n```\n\n");
 
             // Check if we're approaching the token budget
@@ -134,7 +134,7 @@ mod tests {
             nodes: Vec::new(),
             depth: 0,
         };
-        
+
         let result = assembler.assemble(&graph, "Test intent").unwrap();
         assert!(result.contains("Test intent"));
         assert!(result.contains("Total nodes: 0"));
@@ -152,7 +152,7 @@ mod tests {
             }],
             depth: 1,
         };
-        
+
         let result = assembler.assemble(&graph, "Find test function").unwrap();
         assert!(result.contains("test_function"));
         assert!(result.contains("file:///test.rs"));

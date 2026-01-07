@@ -33,13 +33,12 @@ impl LspClient {
     /// Start the LSP server process
     pub async fn start(&self) -> Result<()> {
         let mut process = self.process.lock().await;
-        
+
         let parts: Vec<&str> = self.command.split_whitespace().collect();
-        let (cmd, args) = parts.split_first()
-            .context("Invalid LSP command")?;
+        let (cmd, args) = parts.split_first().context("Invalid LSP command")?;
 
         info!("Starting LSP server: {}", self.command);
-        
+
         let child = Command::new(cmd)
             .args(args)
             .stdin(Stdio::piped())
@@ -49,7 +48,7 @@ impl LspClient {
             .with_context(|| format!("Failed to start LSP server: {}", self.command))?;
 
         *process = Some(child);
-        
+
         debug!("LSP server started successfully");
         Ok(())
     }
@@ -57,24 +56,26 @@ impl LspClient {
     /// Stop the LSP server process
     pub async fn stop(&self) -> Result<()> {
         let mut process = self.process.lock().await;
-        
+
         if let Some(mut child) = process.take() {
             info!("Stopping LSP server");
             child.kill().context("Failed to kill LSP server process")?;
-            child.wait().context("Failed to wait for LSP server process")?;
+            child
+                .wait()
+                .context("Failed to wait for LSP server process")?;
         }
-        
+
         Ok(())
     }
 
     /// Send an initialization request to the LSP server
     pub async fn initialize(&self) -> Result<InitializeResult> {
         debug!("Sending initialize request to LSP server");
-        
+
         // Placeholder for actual JSON-RPC implementation
         // In a full implementation, this would send the initialize request
         // and parse the response
-        
+
         Ok(InitializeResult {
             capabilities: ServerCapabilities::default(),
             server_info: None,
@@ -88,10 +89,10 @@ impl LspClient {
         _position: Position,
     ) -> Result<Option<GotoDefinitionResponse>> {
         debug!("Requesting definition");
-        
+
         // Placeholder for actual JSON-RPC implementation
         // Would send textDocument/definition request
-        
+
         Ok(None)
     }
 
@@ -103,10 +104,10 @@ impl LspClient {
         _include_declaration: bool,
     ) -> Result<Option<Vec<Location>>> {
         debug!("Requesting references");
-        
+
         // Placeholder for actual JSON-RPC implementation
         // Would send textDocument/references request
-        
+
         Ok(None)
     }
 }
