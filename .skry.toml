@@ -1,0 +1,40 @@
+# Example skry configuration file
+# Place this file in your project root as .skry.toml
+
+[general]
+# Maximum number of tokens to include in the context
+token_budget = 4096
+
+# Pruning strategy for dependencies
+# Options: aggressive, bodies, full
+pruning_strategy = "aggressive"
+
+[lsp]
+# Map file extensions to LSP server commands
+# These are the default values; customize as needed
+
+# Rust
+rs = "rust-analyzer"
+
+# C++
+cpp = "clangd"
+cc = "clangd"
+cxx = "clangd"
+h = "clangd"
+hpp = "clangd"
+
+# TypeScript/JavaScript
+ts = "typescript-language-server --stdio"
+tsx = "typescript-language-server --stdio"
+js = "typescript-language-server --stdio"
+jsx = "typescript-language-server --stdio"
+
+# Python (requires pyright or pylsp)
+# py = "pyright-langserver --stdio"
+# py = "pylsp"
+
+# Go (requires gopls)
+# go = "gopls"
+
+# Java (requires jdtls)
+# java = "jdtls"
