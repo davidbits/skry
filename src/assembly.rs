@@ -90,8 +90,9 @@ impl Assembler {
                     .join("\n")
             }
             PruningStrategy::Bodies => {
-                // Remove function bodies but keep signatures
-                // This is a simplified implementation
+                // TODO: Implement proper function body removal
+                // Should parse the AST and extract only signatures
+                // For now, returns full content as placeholder
                 content.to_string()
             }
             PruningStrategy::Full => {

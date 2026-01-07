@@ -69,6 +69,8 @@ impl StandbyDaemon {
 
     /// Send a query to the running daemon
     pub async fn query(&self, _query: &str) -> Result<String> {
+        // TODO: This should connect to the daemon via IPC (Unix socket/named pipe)
+        // Currently only checks local instance state, not the actual daemon process
         if !self.is_running().await {
             anyhow::bail!("Daemon is not running. Start it with 'skry standby'");
         }

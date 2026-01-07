@@ -171,6 +171,8 @@ async fn run_standby() -> Result<()> {
 
 /// Query the running daemon
 async fn query_daemon(symbol: Option<String>, search: Option<String>) -> Result<()> {
+    // TODO: Implement IPC to connect to the actual running daemon process
+    // For now, this creates a new instance which won't have access to the running daemon
     let daemon = standby::StandbyDaemon::new();
 
     let query = if let Some(sym) = symbol {
