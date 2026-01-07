@@ -73,21 +73,11 @@ impl Assembler {
     fn prune_content(&self, content: &str) -> String {
         match self.pruning_strategy {
             PruningStrategy::Aggressive => {
-                // Keep only signatures/declarations
-                content
-                    .lines()
-                    .filter(|line| {
-                        let trimmed = line.trim();
-                        trimmed.starts_with("fn ")
-                            || trimmed.starts_with("pub fn")
-                            || trimmed.starts_with("struct ")
-                            || trimmed.starts_with("pub struct")
-                            || trimmed.starts_with("enum ")
-                            || trimmed.starts_with("pub enum")
-                            || trimmed.starts_with("impl ")
-                    })
-                    .collect::<Vec<_>>()
-                    .join("\n")
+                // TODO: Implement proper language-specific pruning logic
+                // Requires dynamic logic detection based on file extension/language
+                // Should use AST parsing or language-specific patterns for each supported language
+                // For now, returns full content as placeholder
+                content.to_string()
             }
             PruningStrategy::Bodies => {
                 // TODO: Implement proper function body removal
