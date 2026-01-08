@@ -49,7 +49,7 @@ impl Assembler {
 
         for (i, node) in graph.nodes.iter().enumerate() {
             output.push_str(&format!("## {} - {}\n\n", i + 1, node.symbol));
-            output.push_str(&format!("Location: {}\n\n", node.location));
+            output.push_str(&format!("Location: {}\n\n", node.location.as_str()));
             output.push_str("```\n");
 
             // Apply pruning strategy
@@ -103,7 +103,8 @@ impl Assembler {
 mod tests {
     use super::*;
     use crate::pipeline::{DependencyGraph, DependencyNode};
-    use lsp_types::Url;
+    use lsp_types::Uri;
+    use std::str::FromStr;
 
     #[test]
     fn test_assembler_creation() {
@@ -137,7 +138,7 @@ mod tests {
         let graph = DependencyGraph {
             nodes: vec![DependencyNode {
                 symbol: "test_function".to_string(),
-                location: Url::parse("file:///test.rs").unwrap(),
+                location: Uri::from_str("file:///test.rs").unwrap(),
                 content: "fn test_function() {}".to_string(),
                 references: Vec::new(),
             }],

@@ -15,14 +15,14 @@ pub struct LspClient {
     process: Arc<Mutex<Option<Child>>>,
     /// Root URI of the workspace
     #[allow(dead_code)]
-    root_uri: Url,
+    root_uri: Uri,
     /// Command used to start the server
     command: String,
 }
 
 impl LspClient {
     /// Create a new LSP client
-    pub fn new(command: String, root_uri: Url) -> Self {
+    pub fn new(command: String, root_uri: Uri) -> Self {
         Self {
             process: Arc::new(Mutex::new(None)),
             root_uri,
@@ -85,7 +85,7 @@ impl LspClient {
     /// Request the definition of a symbol
     pub async fn goto_definition(
         &self,
-        _uri: Url,
+        _uri: Uri,
         _position: Position,
     ) -> Result<Option<GotoDefinitionResponse>> {
         debug!("Requesting definition");
@@ -99,7 +99,7 @@ impl LspClient {
     /// Request references to a symbol
     pub async fn find_references(
         &self,
-        _uri: Url,
+        _uri: Uri,
         _position: Position,
         _include_declaration: bool,
     ) -> Result<Option<Vec<Location>>> {
@@ -126,10 +126,11 @@ impl Drop for LspClient {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[test]
     fn test_lsp_client_creation() {
-        let root_uri = Url::parse("file:///tmp/test").unwrap();
+        let root_uri = Uri::from_str("file:///tmp/test").unwrap();
         let client = LspClient::new("rust-analyzer".to_string(), root_uri.clone());
         assert_eq!(client.command, "rust-analyzer");
         assert_eq!(client.root_uri, root_uri);

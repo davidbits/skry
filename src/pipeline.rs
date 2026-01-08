@@ -3,7 +3,7 @@
 //! Implements the core pipeline: Intent Parsing → Entry Point → LSP Query → Graph Traversal
 
 use anyhow::Result;
-use lsp_types::{Position, Url};
+use lsp_types::{Position, Uri};
 use std::path::PathBuf;
 use tracing::{debug, info};
 
@@ -34,9 +34,9 @@ pub struct DependencyGraph {
 #[derive(Debug, Clone)]
 pub struct DependencyNode {
     pub symbol: String,
-    pub location: Url,
+    pub location: Uri,
     pub content: String,
-    pub references: Vec<Url>,
+    pub references: Vec<Uri>,
 }
 
 /// Pipeline orchestrator
